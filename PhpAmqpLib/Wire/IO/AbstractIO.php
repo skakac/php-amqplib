@@ -82,11 +82,21 @@ abstract class AbstractIO
     {
         $this->check_heartbeat();
         $this->set_error_handler();
-        try {
-            $result = $this->do_select($sec, $usec);
-            $this->cleanup_error_handler();
-        } catch (\ErrorException $e) {
-            throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
+
+        if (class_exists(\ValueError::class)) { // PHP 8.0+
+            try {
+                $result = $this->do_select($sec, $usec);
+                $this->cleanup_error_handler();
+            } catch (\Throwable $e) {
+                throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
+            }
+        } else { // PHP <8.0
+            try {
+                $result = $this->do_select($sec, $usec);
+                $this->cleanup_error_handler();
+            } catch (\ErrorException $e) {
+                throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
+            }
         }
 
         if ($this->canDispatchPcntlSignal) {
