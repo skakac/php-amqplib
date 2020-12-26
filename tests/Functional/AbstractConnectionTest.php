@@ -9,7 +9,7 @@ use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\AMQPSSLConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCase;
 
 abstract class AbstractConnectionTest extends TestCase
 {
