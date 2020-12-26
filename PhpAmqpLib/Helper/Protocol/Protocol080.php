@@ -17,7 +17,7 @@ class Protocol080
      * @param string $locales
      * @return array
      */
-    public function connectionStart($version_major = 0, $version_minor = 8, $server_properties, $mechanisms = 'PLAIN', $locales = 'en_US')
+    public function connectionStart($version_major = 0, $version_minor = 8, $server_properties = [], $mechanisms = 'PLAIN', $locales = 'en_US')
     {
         $writer = new AMQPWriter();
         $writer->write_octet($version_major);
@@ -138,7 +138,7 @@ class Protocol080
      * @param int $method_id
      * @return array
      */
-    public function connectionClose($reply_code, $reply_text = '', $class_id, $method_id)
+    public function connectionClose($reply_code, $reply_text, $class_id, $method_id)
     {
         $writer = new AMQPWriter();
         $writer->write_short($reply_code);
@@ -223,7 +223,7 @@ class Protocol080
      * @param int $method_id
      * @return array
      */
-    public function channelClose($reply_code, $reply_text = '', $class_id, $method_id)
+    public function channelClose($reply_code, $reply_text, $class_id, $method_id)
     {
         $writer = new AMQPWriter();
         $writer->write_short($reply_code);
@@ -373,7 +373,7 @@ class Protocol080
      * @param array $arguments
      * @return array
      */
-    public function queueBind($ticket = 1, $queue = '', $exchange, $routing_key = '', $nowait = false, $arguments = array())
+    public function queueBind($ticket, $queue, $exchange, $routing_key = '', $nowait = false, $arguments = array())
     {
         $writer = new AMQPWriter();
         $writer->write_short($ticket);
@@ -457,7 +457,7 @@ class Protocol080
      * @param array $arguments
      * @return array
      */
-    public function queueUnbind($ticket = 1, $queue = '', $exchange, $routing_key = '', $arguments = array())
+    public function queueUnbind($ticket, $queue, $exchange, $routing_key = '', $arguments = array())
     {
         $writer = new AMQPWriter();
         $writer->write_short($ticket);
@@ -583,7 +583,7 @@ class Protocol080
      * @param string $routing_key
      * @return array
      */
-    public function basicReturn($reply_code, $reply_text = '', $exchange, $routing_key)
+    public function basicReturn($reply_code, $reply_text, $exchange, $routing_key)
     {
         $writer = new AMQPWriter();
         $writer->write_short($reply_code);
@@ -601,12 +601,12 @@ class Protocol080
      * @param string $routing_key
      * @return array
      */
-    public function basicDeliver($consumer_tag, $delivery_tag, $redelivered = false, $exchange, $routing_key)
+    public function basicDeliver($consumer_tag, $delivery_tag, $redelivered, $exchange, $routing_key)
     {
         $writer = new AMQPWriter();
         $writer->write_shortstr($consumer_tag);
         $writer->write_longlong($delivery_tag);
-        $writer->write_bits(array($redelivered));
+        $writer->write_bits((array)$redelivered);
         $writer->write_shortstr($exchange);
         $writer->write_shortstr($routing_key);
         return array(60, 60, $writer);
@@ -834,7 +834,7 @@ class Protocol080
      * @param string $identifier
      * @return array
      */
-    public function filePublish($ticket = 1, $exchange = '', $routing_key = '', $mandatory = false, $immediate = false, $identifier)
+    public function filePublish($ticket = 1, $exchange = '', $routing_key = '', $mandatory = false, $immediate = false, $identifier = '')
     {
         $writer = new AMQPWriter();
         $writer->write_short($ticket);
@@ -852,7 +852,7 @@ class Protocol080
      * @param string $routing_key
      * @return array
      */
-    public function fileReturn($reply_code = 200, $reply_text = '', $exchange, $routing_key)
+    public function fileReturn($reply_code = 200, $reply_text = '', $exchange = '', $routing_key = '')
     {
         $writer = new AMQPWriter();
         $writer->write_short($reply_code);
@@ -871,7 +871,7 @@ class Protocol080
      * @param string $identifier
      * @return array
      */
-    public function fileDeliver($consumer_tag, $delivery_tag, $redelivered = false, $exchange, $routing_key, $identifier)
+    public function fileDeliver($consumer_tag, $delivery_tag, $redelivered, $exchange, $routing_key, $identifier)
     {
         $writer = new AMQPWriter();
         $writer->write_shortstr($consumer_tag);
@@ -1015,7 +1015,7 @@ class Protocol080
      * @param string $routing_key
      * @return array
      */
-    public function streamReturn($reply_code = 200, $reply_text = '', $exchange, $routing_key)
+    public function streamReturn($reply_code = 200, $reply_text = '', $exchange = '', $routing_key = '')
     {
         $writer = new AMQPWriter();
         $writer->write_short($reply_code);
