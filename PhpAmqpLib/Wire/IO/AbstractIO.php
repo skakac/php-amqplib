@@ -83,14 +83,14 @@ abstract class AbstractIO
         $this->check_heartbeat();
         $this->set_error_handler();
 
-        if (class_exists(\ValueError::class)) { // PHP 8.0+
+        if (PHP_VERSION_ID >= 80000) {
             try {
                 $result = $this->do_select($sec, $usec);
                 $this->cleanup_error_handler();
-            } catch (\Throwable $e) {
+            } catch (\Throwable $e) { // php8.0+: \ErrorException|\ValueError (this syntax is not understood by php < 7.1)
                 throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
             }
-        } else { // PHP <8.0
+        } else {
             try {
                 $result = $this->do_select($sec, $usec);
                 $this->cleanup_error_handler();
