@@ -3,7 +3,7 @@
 namespace PhpAmqpLib\Tests\Unit\Helper;
 
 use PhpAmqpLib\Helper\MiscHelper;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCase;
 
 class MiscHelperTest extends TestCase
 {

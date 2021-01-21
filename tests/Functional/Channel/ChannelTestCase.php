@@ -5,7 +5,7 @@ namespace PhpAmqpLib\Tests\Functional\Channel;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCase;
 
 /**
  * @group connection
@@ -27,7 +27,7 @@ abstract class ChannelTestCase extends TestCase
     /** @var object */
     protected $message;
 
-    public function setUp()
+    protected function setUpCompat()
     {
         $this->connection = new AMQPSocketConnection(HOST, PORT, USER, PASS, VHOST);
 
@@ -47,7 +47,7 @@ abstract class ChannelTestCase extends TestCase
         ];
     }
 
-    public function tearDown()
+    protected function tearDownCompat()
     {
         if ($this->channel) {
             $this->channel->close();

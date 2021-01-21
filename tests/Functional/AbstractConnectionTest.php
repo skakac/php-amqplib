@@ -9,7 +9,7 @@ use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\AMQPSSLConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCase;
 
 abstract class AbstractConnectionTest extends TestCase
 {
@@ -159,7 +159,20 @@ abstract class AbstractConnectionTest extends TestCase
         $this->assertFalse($channel->is_open());
         $this->assertEmpty($channel->callbacks);
     }
+
+    /**
+     * @test
+     */
+    public function testConstructorIOIsNull()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('"io" can not be null');
+
+        new AbstractConnectionDummy('', '');
+    }
 }
+
+class AbstractConnectionDummy extends AbstractConnection {}
 
 // mock low level IO write functions
 namespace PhpAmqpLib\Wire\IO;
